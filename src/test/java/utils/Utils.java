@@ -1,16 +1,18 @@
 package utils;
 
-import base.BaseTest;
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 
-public class Utils extends BaseTest {
+public class Utils {
 
-    public static void deleteElement(String id){
+    public static void deleteElement(String url, String key, String token){
         given()
-                .spec(reqSpec)
+                .queryParam("key", key)
+                .queryParam("token", token)
+                .contentType(ContentType.JSON)
                 .when()
-                .delete(BASE_URL + "/" + ORGANIZATIONS + "/" + id)
+                .delete(url)
                 .then()
                 .statusCode(200);
     }

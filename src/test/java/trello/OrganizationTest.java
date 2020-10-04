@@ -62,11 +62,11 @@ public class OrganizationTest extends BaseTest {
     @DisplayName("Create organization with valid data")
     @ParameterizedTest(name = "Display name: {0}, desc: {1}, name: {2}, website {3} ")
     @MethodSource("createOrganizationData")
-    public void createOrganization(String displayname, String desc, String name, String website) {
+    public void createOrganization(String displayName, String desc, String name, String website) {
 
         Response response = given()
                 .spec(reqSpec)
-                .queryParam("displayName", displayname)
+                .queryParam("displayName", displayName)
                 .queryParam("desc", desc)
                 .queryParam("name", name)
                 .queryParam("website", website)
@@ -78,24 +78,24 @@ public class OrganizationTest extends BaseTest {
                 .response();
 
         JsonPath json = response.jsonPath();
-        assertThat(json.getString("displayName")).isEqualTo(displayname);
+        assertThat(json.getString("displayName")).isEqualTo(displayName);
         assertThat(json.getString("desc")).isEqualTo(desc);
         assertThat(json.getString("name")).startsWith(name);
         assertThat(json.getString("website")).isEqualTo(website);
 
         organizationId = json.getString("id");
 
-        Utils.deleteElement(organizationId);
+        Utils.deleteElement(BASE_URL + "/" + ORGANIZATIONS + "/" + organizationId, KEY, TOKEN);
     }
 
     @DisplayName("Create organization with invalid data")
     @ParameterizedTest(name = "Display name: {0}, desc: {1}, name: {2}, website {3} ")
     @MethodSource("createOrganizationInvalidData")
-    public void createOrganizationInvalidData(String displayname, String desc, String name, String website) {
+    public void createOrganizationInvalidData(String displayName, String desc, String name, String website) {
 
         Response response = given()
                 .spec(reqSpec)
-                .queryParam("displayName", displayname)
+                .queryParam("displayName", displayName)
                 .queryParam("desc", desc)
                 .queryParam("name", name)
                 .queryParam("website", website)
@@ -110,7 +110,7 @@ public class OrganizationTest extends BaseTest {
     @DisplayName("Update organization with invalid data")
     @ParameterizedTest(name = "Display name: {0}, name: {1}, website {2} ")
     @MethodSource("updateOrganizationInvalidData")
-    public void updateOrganizationInvalidData(String displayname, String name, String website) {
+    public void updateOrganizationInvalidData(String displayName, String name, String website) {
 
         Response response = given()
                 .spec(reqSpec)
@@ -131,7 +131,7 @@ public class OrganizationTest extends BaseTest {
 
         given()
                 .spec(reqSpec)
-                .queryParam("displayName", displayname)
+                .queryParam("displayName", displayName)
                 .queryParam("name", name)
                 .queryParam("website", website)
                 .when()
@@ -139,7 +139,7 @@ public class OrganizationTest extends BaseTest {
                 .then()
                 .statusCode(400);
 
-        Utils.deleteElement(organizationId);
+        Utils.deleteElement(BASE_URL + "/" + ORGANIZATIONS + "/" + organizationId, KEY, TOKEN);
 
     }
 
